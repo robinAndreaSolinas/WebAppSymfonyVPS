@@ -9,4 +9,7 @@
 /vendor/
 ###< symfony/framework-bundle ###
 /.idea/
-/tests/
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
