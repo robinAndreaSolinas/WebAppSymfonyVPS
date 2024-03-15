@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ParamPublicationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity( repositoryClass: ParamPublicationRepository::class)]
 #[ORM\Table(name: "publication__param")]
@@ -22,7 +23,7 @@ class ParamPublication
     private ?string $local = null;
 
     #[ORM\Column(length: 15, options: ["default" => "xml-sitemap"])]
-    #[Assert()]
+    #[Assert\Choice(choices:['xml-sitemap', "rss-feed"], message: "You have two option")]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, updatable: false, options: ["default" => "CURRENT_TIMESTAMP"])]

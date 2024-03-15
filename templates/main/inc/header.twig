@@ -1,0 +1,26 @@
+{% block header %}
+    <div class="m-4">
+        <div class="container p-2 bg-light rounded-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+                <ul class="nav col-auto me-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
+                    <li><a href="{# path("main_raw-data") #}" class="nav-link px-2 link-body-emphasis">Dati</a></li>
+                </ul>
+
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="mdo" width="40" height="40" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li><a class="dropdown-item" href="{# path("main_new_user") #}">Aggiungi utente</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        {% endif %}
+                        <li><a class="dropdown-item" href="{{path('main_logout')}}">Esci</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -9,6 +9,7 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,10 +17,10 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: main_index
-                check_path: main_index
-                enable_csrf: true
+#            form_login:
+#                login_path: main_index
+#                check_path: main_index
+#                enable_csrf: true
             logout:
                 path: main_logout
                 # where to redirect after logout
@@ -29,6 +30,11 @@ security:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
+                #always_remember_me: true
+            custom_authenticator: App\Security\UserAuthenticator
+                #always_remember_me: true
+                #always_remember_me: true
+
                 # by default, the feature is enabled by checking a checkbox in the
                 # login form, uncomment the following line to always enable it.
                 #always_remember_me: true
@@ -38,12 +44,15 @@ security:
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
-
+    role_hierarchy:
+        ROLE_ROOT:
+            - ROLE_ADMIN
+        ROLE_ADMIN: ROLE_USER
+        ROLE_USER: ROLE_GUEST
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: /admin, roles: ROLE_USER }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/.+, roles: ROLE_USER }
 
 when@test:
     security:

@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    private const ACTIVE = true;
+    private const NOT_ACTIVE = false;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -41,17 +43,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        public function findByEmail(string $email, bool $active = self::ACTIVE ): User
+        {
+            return $this->createQueryBuilder('u')
+                ->andWhere('u.email = :myMail')
+                ->andWhere('u.enabled = :isEnabled')
+                ->setParameter('myMail', $email)
+                ->setParameter('isEnabled', $active)
+                ->getQuery()
+                ->getSingleResult()
+            ;
+        }
 
     //    public function findOneBySomeField($value): ?User
     //    {
