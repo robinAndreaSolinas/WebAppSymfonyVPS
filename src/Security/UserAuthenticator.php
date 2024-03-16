@@ -26,17 +26,15 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
     private EntityManagerInterface $entityManager;
-    private UserRepository $userRepository;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, EntityManagerInterface $entityManager)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
     }
     public function supports(Request $request): bool
     {
-        return ($request->getPathInfo() === '/' && $request->isMethod('POST'));
+        return ($request->getPathInfo() === '/' && $request->isMethod('POST') && !$request->getUser());
     }
 
 
@@ -58,6 +56,11 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        $login = $token->getUser();
+        $login->setLastLogin(new \DateTimeImmutable());
+        $this->entityManager->persist($login);
+        $this->entityManager->flush();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

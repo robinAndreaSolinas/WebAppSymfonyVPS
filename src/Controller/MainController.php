@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\PublicationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 #[Route('/', name: 'main_')]
@@ -25,9 +22,7 @@ class MainController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         if ($this->isGranted("ROLE_USER") && !empty($this->getUser())) {
-            return $this->render('main/index.html.twig', [
-                "controller_name" => "homepage"
-            ]);
+            return $this->render('main/index.html.twig');
         }else {
             return $this->render('main/login.html.twig',[
                 'last_username' => $lastUsername,
@@ -36,6 +31,10 @@ class MainController extends AbstractController
         }
     }
 
+    #[Route('data', name: 'raw-data')]
+    public function dataRaw(): Response{
+        return $this->render("main/raw-data.twig");
+    }
 
     #[Route(path: '/logout', name: 'logout')]
     public function logout(): void

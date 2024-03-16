@@ -1,0 +1,75 @@
+{% extends 'main/skeleton.twig' %}
+
+{% block title %}Dati Grezzi{% endblock %}
+
+{% block content %}
+    <h1 class="container mb-5">Dati Grezzi</h1>
+    <section class="mx-5">
+        <table id="example" class="display table" style="width:100%">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Url</th>
+                <th>Journal</th>
+                <th>Datetime</th>
+                <th>Editorial</th>
+                <th>Img</th>
+                <th>Body</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </section>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script type="module">
+        import $ from 'jquery';
+
+        import DataTable from 'datatables.net-dt';
+        import 'datatables.net-responsive-dt';
+        new DataTable('#example', {
+            columns:[
+                {data:"id"},
+                {
+                    data:"url",
+                    render: (url) =>{
+                        return '<a href="' + url + '" target="_blank" title="' + url + '">' + url.slice(0,50) + '</a>'
+                    }
+                },
+                {data:"journal"},
+                {
+                    data: "datetime.date",
+                    render: (data) => {
+                        var datetime = new Date(data);
+                        return datetime.toLocaleDateString('it') + " " +
+                            String(datetime.getHours()).padStart(2, '0') + ':' +
+                            String(datetime.getMinutes()).padStart(2, '0') + ':' +
+                            String(datetime.getSeconds()).padStart(2, '0');
+                    }
+                },
+                {data:"editorial"},
+                {data:"img"},
+                {data:"body"},
+            ],
+            responsive: true,
+            lengthMenu: [[50, 100, 500, 1000, -1], [50 , 100 , 500 , 1000 , "Tutti"]],
+            pageLength: 50,
+            scrollCollapse: true,
+            scrollY: () => {
+                return $(window).height() /2;
+            },
+
+            ajax: {
+                url: "{{ path('ajax_data') }}",
+                type: "GET",
+                dataSrc:"data",
+                error: function(xhr, error, thrown) {
+                    console.log('Errore durante la richiesta Ajax:', error);
+                }
+            },
+        });
+    </script>
+{% endblock %}

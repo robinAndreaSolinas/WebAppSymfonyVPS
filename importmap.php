@@ -29,7 +29,31 @@ return [
         'version' => '5.3.3',
         'type' => 'css',
     ],
-    'datatables' => [
-        'version' => '1.10.18',
+    'datatables.net-dt' => [
+        'version' => '2.0.2',
+    ],
+    'datatables.net' => [
+        'version' => '2.0.2',
+    ],
+    'datatables.net-dt/css/dataTables.dataTables.min.css' => [
+        'version' => '2.0.2',
+        'type' => 'css',
+    ],
+    'datatables.net-responsive' => [
+        'version' => '3.0.0',
+    ],
+    'datatables.net-datetime' => [
+        'version' => '1.5.2',
+    ],
+    'datatables.net-datetime/dist/dataTables.dateTime.min.css' => [
+        'version' => '1.5.2',
+        'type' => 'css',
+    ],
+    'datatables.net-responsive-dt' => [
+        'version' => '3.0.0',
+    ],
+    'datatables.net-responsive-dt/css/responsive.dataTables.min.css' => [
+        'version' => '3.0.0',
+        'type' => 'css',
     ],
 ];
