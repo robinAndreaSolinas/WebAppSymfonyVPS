@@ -3,10 +3,12 @@
 {% block title %}{% endblock %}
 
 {% use "main/inc/header.twig" %}
-{#{% use "main/inc/footer.twig" %}#}
 
 
 {% block body %}
+
+    {{ include('main/inc/flashes.twig') }}
+
     <section class="container-fluid pt-3">
         {% block content %}{% endblock %}
     </section>

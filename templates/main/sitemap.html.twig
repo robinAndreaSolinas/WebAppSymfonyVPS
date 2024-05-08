@@ -1,0 +1,173 @@
+{% extends 'main/skeleton.twig' %}
+
+{% block title %}Controllo sitemap{% endblock %}
+
+{% block content %}
+    <section class="container">
+        <h1>Gestisci sitemap</h1>
+
+        <article class="d-flex align-items-center justify-content-center py-5 my-5">
+            <form action="{{ path('sitemap_add') }}" class="form row" method="POST" enctype="multipart/form-data">
+                <div class="col-12 col-md-5">
+                    <label for="url">URL della sitemap</label>
+                    <input type="url" name="url" id="url" class="form-control btn-variable"required>
+                </div>
+                <div class="col-12 col-md">
+                    <label for="location">Luogo</label>
+                    <input type="text" name="location" id="location" class="form-control"required>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <label for="type">Tipologia</label>
+                    <select name="type" id="type" required class="form-select">
+                        <option value="xml">xml-sitemap</option>
+                        <option value="rss">rss-feed</option>
+                    </select>
+                </div>
+                <button class="col-12 col-md btn btn-success ms-5">Aggiungi Sitemap</button>
+            </form>
+
+        </article>
+
+        <article class="accordion">
+            <div id="table" class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Tabella delle Sitemap
+                    </button>
+                </h2>
+
+                <div id="collapseOne" class="accordion-collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <table class="table sitemap" id="example">
+                            <thead>
+                            <tr>
+                                <th>Sitemap Url</th>
+                                <th>Luogo</th>
+                                <th>Tipologa</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for map in sitemap %}
+                                <tr id="link-{{ map.id }}" data-id="{{ map.id }}">
+                                    <td class="col-lg-8"><input class="toggle-input form-control" name="url" value="{{ map.url }}" disabled></td>
+                                    <td class="col-lg-1"><input class="toggle-input form-control" name="location" value="{{ map.local }}" disabled></td>
+                                    <td class="col-lg-2"><input class="toggle-input form-control" name="type" value="{{ map.type }}" disabled></td>
+                                    <td class="col-lg-1">
+                                        <span class="btn btn-info text-white btn-toggle btn-toggle--modify"><i class="fa fa-pen"></i></span>
+                                        <a class="btn btn-danger" href="{{ path('sitemap_delete', {"siteMap": map.id}) }}"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </section>
+{% endblock %}
+
+{% block footer %}
+    <section class="fixed-bottom bg-light">
+        <div class="container py-2">
+            <div id="btn-group" class="row align-items-center">
+                <div id="btn-year" data-value="y" class=" btn-variable col text-center btn py-2">{ANNO}</div>
+                <div id="btn-month" data-value="m" class=" btn-variable col text-center btn py-2">{MESE}</div>
+                <div id="btn-day" data-value="d" class=" btn-variable col text-center btn py-2">{GIORNO}</div>
+            </div>
+            <small>Le variabili per modificare il giorno/mese/anno</small>
+        </div>
+    </section>
+{% endblock %}
+{% block js %}
+    {{ parent() }}
+    <script type="module">
+        import $ from 'jquery';
+        import 'datatables.net-responsive-dt';
+
+        $(function () {
+            let isInputEnabled = false;
+            $(".btn-toggle").click(function (e){
+                let id = $(this).parent().parent().data("id");
+                let inputs =$(this).parent().parent().find("input")
+
+                inputs.attr("disabled", false)
+                isInputEnabled = true
+
+                if($(this).hasClass("btn-toggle--send")) {
+                    const data = {}
+                    inputs.each((index, ele) => {
+                        data[$(ele).attr("name")] = $(ele).val();
+                    });
+                    let url ="{{ path('ajax_edit-sitemap', {"siteMap": "__id__" }) }}".replace('__id__', id);
+
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: data,
+                        success: function(response) {
+                            let alert = $(
+                                '<div class="m-5 fixed-top alert alert-' + response.type + '">' + response.message + '</div>'
+                            )
+                            $("header").append(alert);
+                            alert.fadeOut(2000, function(){
+                                $(this).remove();
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr,status,error)
+                        }
+                    })
+
+
+                    inputs.attr("disabled", true)
+                    isInputEnabled = false
+                }
+
+                let save = $(this);
+                $(this).next().toggle();
+
+                save
+                    .toggleClass("btn-info btn-toggle--modify")
+                    .toggleClass("btn-success w-100 btn-toggle--send")
+                save.children("i")
+                    .toggleClass("fa-pen")
+                    .toggleClass("fa-floppy-disk");
+
+            });
+
+            let element;
+
+            $(".btn-variable").click(function (e){
+                if (isInputEnabled){
+                    const caretPos = element[0].selectionStart;
+                    const textAreaTxt = element.val();
+                    let txtToAdd = "";
+                    switch ($(this).data("value")){
+                        case 'y':
+                            txtToAdd = "{_YEAR_}"
+                            break;
+                        case 'm':
+                            txtToAdd = "{_MONTH_}"
+                            break;
+                        case 'd':
+                            txtToAdd = "{_DAY_}"
+                            break;
+                    }
+
+                    const newText = textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos);
+                    element.val(newText);
+                }
+            });
+
+            $("input").click(function (e){
+               element = $(this)
+            });
+
+        });
+
+
+    </script>
+{% endblock %}

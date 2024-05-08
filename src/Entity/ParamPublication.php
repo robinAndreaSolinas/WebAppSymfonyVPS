@@ -17,6 +17,7 @@ class ParamPublication
     private ?int $id = null;
 
     #[ORM\Column(length: 512)]
+//    #[Assert\Url(message: "Il valore non è una url valida")]
     private ?string $url = null;
 
     #[ORM\Column(length: 50, nullable: true)]

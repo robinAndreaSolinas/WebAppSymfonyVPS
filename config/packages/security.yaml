@@ -47,12 +47,15 @@ security:
     role_hierarchy:
         ROLE_ROOT:
             - ROLE_ADMIN
-        ROLE_ADMIN: ROLE_USER
+        ROLE_ADMIN:
+            - ROLE_USER
+            - ROLE_SEO_TEAM
+            - ROLE_SOCIAL_TEAM
         ROLE_USER: ROLE_GUEST
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/.+, roles: ROLE_USER }
+        - { path: ^/.+, roles: ROLE_GUEST }
 
 when@test:
     security:

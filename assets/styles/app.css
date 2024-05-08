@@ -1,0 +1,4 @@
+.sitemap input.form-control:disabled{
+    background: transparent;
+    border: none;
+}

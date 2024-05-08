@@ -1,0 +1,22 @@
+{% extends 'main/skeleton.twig' %}
+
+{% block title %}Modifica Password{% endblock %}
+
+{% block content %}
+    <section class="container">
+        <h1>Modifica Password</h1>
+        {{ form_start(form) }}
+        <div class="form-group my-3">
+            {{ form_row(form.curPsw, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group my-3">
+            {{ form_row(form.newPsw, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group my-3">
+            {{ form_row(form.confNewPsw, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary mt-2'}}) }}
+        {{ form_end(form) }}
+    </section>
+{% endblock %}
+

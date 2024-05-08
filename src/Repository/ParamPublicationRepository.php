@@ -45,4 +45,12 @@ class ParamPublicationRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findAllActive(): array
+    {
+        return $this->createQueryBuilder("p")
+            ->andWhere("p.deletedAt IS NULL")
+            ->andWhere("p.deletedBy IS NULL")
+            ->getQuery()
+            ->getResult();
+    }
 }
