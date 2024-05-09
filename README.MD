@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/Version-1.3-green)
+![Version](https://img.shields.io/badge/Version-1.0.3-green)
 ![License](https://img.shields.io/badge/License-Proprietary-orange)
 ![Symfony](https://img.shields.io/badge/Symfony-7.0-%23000000.svg?logo=symfony&logoColor=white)
 ![PHP](https://img.shields.io/badge/php-≥8.2-%23777BB4.svg?logo=php&logoColor=white)
@@ -16,5 +16,3 @@ This is a server app for getting sitemaps into the scraping queue and identifyin
 ## Notice
 
 #### Carefully use
-
-There are no specific laws that prohibit data scraping. Professional scrapers follow data protection rules and **access only publicly available data**.

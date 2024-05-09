@@ -3,6 +3,7 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "version": "1.0.3",
     "authors": [
         {
             "name": "Andrea Solinas",
