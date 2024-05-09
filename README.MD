@@ -13,6 +13,3 @@ This is a project for managing the scraping of sitemap articles.
 > The scraping codes is unavailable.
 
 This is a Web application based on the symfony framework to manage API and spiders parameters.
-
-## Additions
-Implementing Facebook APi graph
